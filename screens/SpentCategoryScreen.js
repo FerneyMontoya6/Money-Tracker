@@ -1,10 +1,12 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 
-export default function CategoryScreen({ navigation }) {
+export default function SpentCategorySpeScreen({ navigation }) {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Selecciona tus categorías</Text>
+
+      <Text style={styles.secundatyTitle}>Categorías de gasto</Text>
 
       <View style={styles.categoriesContainer}>
         {['Entretenimiento', 'Salud', 'Fitness', 'Comida'].map((category) => (
@@ -16,7 +18,7 @@ export default function CategoryScreen({ navigation }) {
 
       <TouchableOpacity
         style={styles.button}
-        onPress={() => navigation.navigate('Home')}
+        onPress={() => navigation.navigate('IncomeCategoriesScreen')}
       >
         <Text style={styles.buttonText}>Siguiente</Text>
       </TouchableOpacity>
@@ -29,10 +31,16 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     padding: 20,
+    paddingTop: 5,
     backgroundColor: '#fff',
   },
   title: {
-    fontSize: 24,
+    fontSize: 36,
+    fontWeight: 'bold',
+    marginBottom: 70,
+  },
+  secundatyTitle: {
+    fontSize: 20,
     fontWeight: 'bold',
     marginBottom: 20,
   },
@@ -47,6 +55,7 @@ const styles = StyleSheet.create({
   },
   categoryText: {
     fontSize: 16,
+    textAlign: 'center',
   },
   button: {
     backgroundColor: '#000',

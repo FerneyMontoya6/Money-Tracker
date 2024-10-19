@@ -3,10 +3,13 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import LandingScreen from "./screens/LandingScreen";
-import CategoryScreen from "./screens/CategoryScreen";
+import SpentCategoryScreen from "./screens/SpentCategoryScreen";
+import IncomeCategoryScreen from "./screens/IncomeCategoryScreen";
 import HomeScreen from "./screens/HomeScreen";
 import ActivityRegisterScreen from "./screens/ActivityRegisterScreen";
 import AccountsScreen from './screens/AccountsScreen'
+import CreateAlertScreen from './screens/CreateAlertScreen'
+import AlertsScreen from './screens/AlertsScreen'
 import { MaterialIcons } from "@expo/vector-icons";
 import { iconsNavigationBar } from "./utils/constants";
 
@@ -26,6 +29,16 @@ function HomeStackNavigator() {
         component={ActivityRegisterScreen}
         options={{ headerShown: false }}
       />
+      <Stack.Screen
+        name="AlertsScreen"
+        component={AlertsScreen}
+        options={{ headerShown: true, title: 'Alertas' }}
+      />
+      <Stack.Screen
+        name="CreateAlertScreen"
+        component={CreateAlertScreen}
+        options={{ headerShown: true, title: 'Crear Alerta' }}
+      />
     </Stack.Navigator>
   );
 }
@@ -39,13 +52,13 @@ function CategoriesStackNavigator() {
         options={{ headerShown: false }}
       />
       <Stack.Screen
-        name="CategoriesScreen"
-        component={CategoryScreen}
+        name="SpentCategoriesScreen"
+        component={SpentCategoryScreen}
         options={{ headerShown: false }}
       />
       <Stack.Screen
-        name="AccountsScreen"
-        component={AccountsScreen}
+        name="IncomeCategoriesScreen"
+        component={IncomeCategoryScreen}
         options={{ headerShown: false }}
       />
     </Stack.Navigator>

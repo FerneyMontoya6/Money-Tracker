@@ -19,7 +19,7 @@ export default function HomeScreen({ navigation }) {
             <Text style={styles.welcome}>Bienvenido nuevamente</Text>
           </View>
         </View>
-        <TouchableOpacity style={styles.notificationIcon}>
+        <TouchableOpacity style={styles.notificationIcon} onPress={() => navigation.navigate('AlertsScreen')} >
           <MaterialIcons name="notifications-none" size={30} color="#000" />
           <View style={styles.notificationBadge}>
             <Text style={styles.badgeText}>5</Text>
