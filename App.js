@@ -6,7 +6,9 @@ import LandingScreen from "./screens/LandingScreen";
 import CategoryScreen from "./screens/CategoryScreen";
 import HomeScreen from "./screens/HomeScreen";
 import ActivityRegisterScreen from "./screens/ActivityRegisterScreen";
+import AccountsScreen from './screens/AccountsScreen'
 import { MaterialIcons } from "@expo/vector-icons";
+import { iconsNavigationBar } from "./utils/constants";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -15,7 +17,7 @@ function HomeStackNavigator() {
   return (
     <Stack.Navigator initialRouteName="HomeScreen">
       <Stack.Screen
-        name="HomeScreen"  
+        name="HomeScreen"
         component={HomeScreen}
         options={{ headerShown: false }}
       />
@@ -37,8 +39,25 @@ function CategoriesStackNavigator() {
         options={{ headerShown: false }}
       />
       <Stack.Screen
-        name="CategoriesScreen" 
+        name="CategoriesScreen"
         component={CategoryScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="AccountsScreen"
+        component={AccountsScreen}
+        options={{ headerShown: false }}
+      />
+    </Stack.Navigator>
+  );
+}
+
+function AccountsStackNavigator() {
+  return (
+    <Stack.Navigator initialRouteName="AccountsScreen">
+      <Stack.Screen
+        name="AccountsScreen"
+        component={AccountsScreen}
         options={{ headerShown: false }}
       />
     </Stack.Navigator>
@@ -51,15 +70,7 @@ export default function App() {
       <Tab.Navigator
         screenOptions={({ route }) => ({
           tabBarIcon: ({ color, size }) => {
-            let iconName;
-
-            if (route.name === "HomeTab") {
-              iconName = "home";
-            } else if (route.name === "CategoriesTab") {
-              iconName = "category";
-            } else if (route.name === "ProfileTab") {
-              iconName = "account-circle";
-            }
+            const iconName = iconsNavigationBar[route.name];
 
             return <MaterialIcons name={iconName} size={size} color={color} />;
           },
@@ -72,13 +83,18 @@ export default function App() {
         })}
       >
         <Tab.Screen
-          name="HomeTab"  
-          component={HomeStackNavigator} 
+          name="HomeTab"
+          component={HomeStackNavigator}
           options={{ headerShown: false }}
         />
         <Tab.Screen
-          name="CategoriesTab" 
-          component={CategoriesStackNavigator} 
+          name="CategoriesTab"
+          component={CategoriesStackNavigator}
+          options={{ headerShown: false }}
+        />
+        <Tab.Screen
+          name="AccountsTab"
+          component={AccountsStackNavigator}
           options={{ headerShown: false }}
         />
       </Tab.Navigator>
