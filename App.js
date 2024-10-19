@@ -6,9 +6,10 @@ import LandingScreen from "./screens/LandingScreen";
 import CategoryScreen from "./screens/CategoryScreen";
 import HomeScreen from "./screens/HomeScreen";
 import ActivityRegisterScreen from "./screens/ActivityRegisterScreen";
-import AccountsScreen from './screens/AccountsScreen'
+import AccountsScreen from "./screens/AccountsScreen";
 import { MaterialIcons } from "@expo/vector-icons";
 import { iconsNavigationBar } from "./utils/constants";
+import CreateAccountScreen from "./screens/CreateAccountScreen";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -58,6 +59,11 @@ function AccountsStackNavigator() {
       <Stack.Screen
         name="AccountsScreen"
         component={AccountsScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="CreateAccountsScreen"
+        component={CreateAccountScreen}
         options={{ headerShown: false }}
       />
     </Stack.Navigator>
