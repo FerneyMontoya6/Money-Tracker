@@ -7,11 +7,12 @@ import SpentCategoryScreen from "./screens/SpentCategoryScreen";
 import IncomeCategoryScreen from "./screens/IncomeCategoryScreen";
 import HomeScreen from "./screens/HomeScreen";
 import ActivityRegisterScreen from "./screens/ActivityRegisterScreen";
-import AccountsScreen from './screens/AccountsScreen'
-import CreateAlertScreen from './screens/CreateAlertScreen'
-import AlertsScreen from './screens/AlertsScreen'
+import AccountsScreen from "./screens/AccountsScreen";
+import CreateAlertScreen from "./screens/CreateAlertScreen";
+import AlertsScreen from "./screens/AlertsScreen";
 import { MaterialIcons } from "@expo/vector-icons";
 import { iconsNavigationBar } from "./utils/constants";
+import CreateAccountScreen from "./screens/CreateAccountScreen";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -32,12 +33,12 @@ function HomeStackNavigator() {
       <Stack.Screen
         name="AlertsScreen"
         component={AlertsScreen}
-        options={{ headerShown: true, title: 'Alertas' }}
+        options={{ headerShown: true, title: "Alertas" }}
       />
       <Stack.Screen
         name="CreateAlertScreen"
         component={CreateAlertScreen}
-        options={{ headerShown: true, title: 'Crear Alerta' }}
+        options={{ headerShown: true, title: "Crear Alerta" }}
       />
     </Stack.Navigator>
   );
@@ -71,6 +72,11 @@ function AccountsStackNavigator() {
       <Stack.Screen
         name="AccountsScreen"
         component={AccountsScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="CreateAccountsScreen"
+        component={CreateAccountScreen}
         options={{ headerShown: false }}
       />
     </Stack.Navigator>
