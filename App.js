@@ -6,6 +6,7 @@ import LandingScreen from "./screens/LandingScreen";
 import CategoryScreen from "./screens/CategoryScreen";
 import HomeScreen from "./screens/HomeScreen";
 import ActivityRegisterScreen from "./screens/ActivityRegisterScreen";
+import AccountsScreen from './screens/AccountsScreen'
 import { MaterialIcons } from "@expo/vector-icons";
 import { iconsNavigationBar } from "./utils/constants";
 
@@ -42,6 +43,23 @@ function CategoriesStackNavigator() {
         component={CategoryScreen}
         options={{ headerShown: false }}
       />
+      <Stack.Screen
+        name="AccountsScreen"
+        component={AccountsScreen}
+        options={{ headerShown: false }}
+      />
+    </Stack.Navigator>
+  );
+}
+
+function AccountsStackNavigator() {
+  return (
+    <Stack.Navigator initialRouteName="AccountsScreen">
+      <Stack.Screen
+        name="AccountsScreen"
+        component={AccountsScreen}
+        options={{ headerShown: false }}
+      />
     </Stack.Navigator>
   );
 }
@@ -72,6 +90,11 @@ export default function App() {
         <Tab.Screen
           name="CategoriesTab"
           component={CategoriesStackNavigator}
+          options={{ headerShown: false }}
+        />
+        <Tab.Screen
+          name="AccountsTab"
+          component={AccountsStackNavigator}
           options={{ headerShown: false }}
         />
       </Tab.Navigator>
