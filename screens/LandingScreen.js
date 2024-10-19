@@ -23,7 +23,7 @@ export default function LandingScreen({ navigation }) {
       <CustomTextInput label="Nombre" placeholder="Escribe tu nombre" />
       <TouchableOpacity
         style={styles.button}
-        onPress={() => navigation.navigate("Categories")}
+        onPress={() => navigation.navigate("CategoriesScreen")}
       >
         <Text style={styles.buttonText}>Siguiente</Text>
       </TouchableOpacity>
