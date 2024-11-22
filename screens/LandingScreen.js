@@ -3,7 +3,14 @@ import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { CustomTextInput } from "../components/Input";
 
 export default function LandingScreen({ navigation }) {
-  const [name, setName] = useState("");
+  const handleNavigateToCategories = () => {
+    navigation.navigate("MainApp", {
+      screen: "CategoriesTab",
+      params: {
+        screen: "SpentCategoriesScreen",
+      },
+    });
+  };
 
   return (
     <View style={styles.container}>
@@ -23,7 +30,7 @@ export default function LandingScreen({ navigation }) {
       <CustomTextInput label="Nombre" placeholder="Escribe tu nombre" />
       <TouchableOpacity
         style={styles.button}
-        onPress={() => navigation.navigate("SpentCategoriesScreen")}
+        onPress={handleNavigateToCategories}
       >
         <Text style={styles.buttonText}>Siguiente</Text>
       </TouchableOpacity>

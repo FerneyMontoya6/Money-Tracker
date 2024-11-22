@@ -46,12 +46,7 @@ function HomeStackNavigator() {
 
 function CategoriesStackNavigator() {
   return (
-    <Stack.Navigator initialRouteName="LandingScreen">
-      <Stack.Screen
-        name="LandingScreen"
-        component={LandingScreen}
-        options={{ headerShown: false }}
-      />
+    <Stack.Navigator initialRouteName="SpentCategoriesScreen">
       <Stack.Screen
         name="SpentCategoriesScreen"
         component={SpentCategoryScreen}
@@ -83,40 +78,59 @@ function AccountsStackNavigator() {
   );
 }
 
+function TabNavigator() {
+  return (
+    <Tab.Navigator
+      screenOptions={({ route }) => ({
+        tabBarIcon: ({ color, size }) => {
+          const iconName = iconsNavigationBar[route.name];
+
+          return <MaterialIcons name={iconName} size={size} color={color} />;
+        },
+        tabBarActiveTintColor: "black",
+        tabBarInactiveTintColor: "gray",
+        tabBarStyle: {
+          backgroundColor: "#fff",
+          borderTopColor: "#ccc",
+        },
+      })}
+    >
+      <Tab.Screen
+        name="HomeTab"
+        component={HomeStackNavigator}
+        options={{ headerShown: false }}
+      />
+      <Tab.Screen
+        name="CategoriesTab"
+        component={CategoriesStackNavigator}
+        options={{ headerShown: false }}
+      />
+      <Tab.Screen
+        name="AccountsTab"
+        component={AccountsStackNavigator}
+        options={{ headerShown: false }}
+      />
+    </Tab.Navigator>
+  );
+}
+
 export default function App() {
   return (
     <NavigationContainer>
-      <Tab.Navigator
-        screenOptions={({ route }) => ({
-          tabBarIcon: ({ color, size }) => {
-            const iconName = iconsNavigationBar[route.name];
-
-            return <MaterialIcons name={iconName} size={size} color={color} />;
-          },
-          tabBarActiveTintColor: "black",
-          tabBarInactiveTintColor: "gray",
-          tabBarStyle: {
-            backgroundColor: "#fff",
-            borderTopColor: "#ccc",
-          },
-        })}
-      >
-        <Tab.Screen
-          name="HomeTab"
-          component={HomeStackNavigator}
+      <Stack.Navigator initialRouteName="LandingScreen">
+        {/* LandingScreen como pantalla inicial */}
+        <Stack.Screen
+          name="LandingScreen"
+          component={LandingScreen}
           options={{ headerShown: false }}
         />
-        <Tab.Screen
-          name="CategoriesTab"
-          component={CategoriesStackNavigator}
+        {/* TabNavigator para las pantallas protegidas */}
+        <Stack.Screen
+          name="MainApp"
+          component={TabNavigator}
           options={{ headerShown: false }}
         />
-        <Tab.Screen
-          name="AccountsTab"
-          component={AccountsStackNavigator}
-          options={{ headerShown: false }}
-        />
-      </Tab.Navigator>
+      </Stack.Navigator>
     </NavigationContainer>
   );
 }
