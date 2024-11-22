@@ -1,8 +1,18 @@
 import { TextInput, View, Text } from "react-native";
-import React from "react";
 
-// Desestructuramos las props, incluyendo `placeholder` y `onChangeText`
-const CustomTextInput = ({ placeholder, label, onChangeText, value }) => {
+interface CustomTextInputProps {
+  placeholder: string;
+  label: string;
+  onChangeText: (text: string) => void;
+  value: string;
+}
+
+const CustomTextInput = ({
+  placeholder,
+  label,
+  onChangeText,
+  value,
+}: CustomTextInputProps) => {
   return (
     <View
       style={{

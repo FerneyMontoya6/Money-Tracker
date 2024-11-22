@@ -1,20 +1,25 @@
-import React, { useState } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { Dispatch, SetStateAction, useState } from "react";
+import { View, Text } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { TouchableOpacity } from "react-native";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 
-const DateInput = ({ date, setDate }) => {
+interface DateInputProps {
+  date: Date;
+  setDate: Dispatch<SetStateAction<Date>>;
+}
+
+const DateInput = ({ date, setDate }: DateInputProps) => {
   const [show, setShow] = useState(false);
 
-  const onChange = (event, selectedDate) => {
+  const onChange = ({ selectedDate }: any) => {
     const currentDate = selectedDate || date;
     setShow(false);
     setDate(currentDate);
   };
 
   return (
-    <View style={styles.container}>
+    <View>
       <Text
         style={{
           marginBottom: 6,
@@ -57,12 +62,5 @@ const DateInput = ({ date, setDate }) => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  selectedDate: {
-    marginTop: 20,
-    fontSize: 16,
-  },
-});
 
 export { DateInput };

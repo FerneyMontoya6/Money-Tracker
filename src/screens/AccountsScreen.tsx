@@ -1,16 +1,28 @@
-import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { AccountCard } from "../components/AccountCard";
 import { accounts } from "../utils/mock";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { AccountsStackParamList } from "src/navigation/types";
 
-export default function AccountScreen({ navigation }) {
+// Definir el tipo de las props de navegación
+type AccountsScreenNavigationProp = StackNavigationProp<
+  AccountsStackParamList,
+  "AccountsScreen"
+>;
+
+// Definir las props del componente
+type Props = {
+  navigation: AccountsScreenNavigationProp;
+};
+
+export default function AccountScreen({ navigation }: Props) {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.title}>Cuentas</Text>
         <TouchableOpacity
           style={styles.button}
-          onPress={() => navigation.navigate("CreateAccountsScreen")}
+          onPress={() => navigation.navigate("AccountsScreen")}
         >
           <Text>Agregar Cuenta</Text>
         </TouchableOpacity>

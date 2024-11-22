@@ -1,4 +1,6 @@
-export const accounts = [
+import { AccountMockData } from "src/types";
+
+export const accounts: AccountMockData[] = [
   {
     id: "1",
     name: "Nequi",

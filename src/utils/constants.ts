@@ -1,10 +1,12 @@
+import { LabelAndValue } from "src/types";
+
 export const iconsNavigationBar: Record<string, string> = {
   HomeTab: "home",
   CategoriesTab: "category",
   AccountsTab: "account-balance-wallet",
 };
 
-export const bankingEntities = [
+export const bankingEntities: LabelAndValue[] = [
   {
     label: "Bancolombia",
     value: "1",
@@ -19,7 +21,7 @@ export const bankingEntities = [
   },
 ];
 
-export const typesOfAccounts = [
+export const typesOfAccounts: LabelAndValue[] = [
   {
     label: "Efectivo",
     value: "1",

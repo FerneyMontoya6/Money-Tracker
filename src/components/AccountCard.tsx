@@ -1,7 +1,14 @@
 import { View, Text, StyleSheet } from "react-native";
 import { formatToCurrency } from "../utils/functions";
 
-const AccountCard = ({ index, name, type, balance }) => {
+interface AccountCardProps {
+  index: number;
+  name: string;
+  type: string;
+  balance: number;
+}
+
+const AccountCard = ({ index, name, type, balance }: AccountCardProps) => {
   return (
     <View style={styles.cardContainer}>
       <Text style={styles.header}>Cuenta {index}</Text>

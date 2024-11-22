@@ -1,8 +1,19 @@
-import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 
-const SelectInput = ({ label, selectedValue, onValueChange, options }) => {
+interface SelectInputProps {
+  label: string;
+  selectedValue: string;
+  onValueChange: (event: any) => void;
+  options: { label: string; value: string }[];
+}
+
+const SelectInput = ({
+  label,
+  selectedValue,
+  onValueChange,
+  options,
+}: SelectInputProps) => {
   return (
     <View
       style={{
