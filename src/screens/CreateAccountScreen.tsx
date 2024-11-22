@@ -1,18 +1,25 @@
+import { useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { CustomTextInput } from "../components/Input";
 import { SelectInput } from "../components/SelectInput";
-import { bankingEntities, typesOfAccounts } from "../utils/constants";
-import { useState } from "react";
 import { DateInput } from "../components/DateInput";
+import { bankingEntities, typesOfAccounts } from "../utils/constants";
+
+// Tipos de las opciones de SelectInput
+type Option = {
+  label: string;
+  value: string;
+};
 
 export default function CreateAccountScreen() {
-  const [selectedBankingEntity, setSelectedBankingEntity] = useState(
+  // Estados tipados
+  const [selectedBankingEntity, setSelectedBankingEntity] = useState<string>(
     bankingEntities[0].value
   );
-  const [selectedTypeOfAccount, setSelectedTypeOfAccount] = useState(
+  const [selectedTypeOfAccount, setSelectedTypeOfAccount] = useState<string>(
     typesOfAccounts[0].value
   );
-  const [date, setDate] = useState(new Date());
+  const [date, setDate] = useState<Date>(new Date());
 
   return (
     <View style={styles.container}>
@@ -28,30 +35,18 @@ export default function CreateAccountScreen() {
             label="Entidad Bancaria"
             options={bankingEntities}
             selectedValue={selectedBankingEntity}
-            onValueChange={(event) => {
-              setSelectedBankingEntity(event);
-            }}
+            onValueChange={(value) => setSelectedBankingEntity(value)}
           />
           <SelectInput
             label="Tipo de cuenta"
             options={typesOfAccounts}
             selectedValue={selectedTypeOfAccount}
-            onValueChange={(event) => {
-              setSelectedTypeOfAccount(event);
-            }}
+            onValueChange={(value) => setSelectedTypeOfAccount(value)}
           />
           <DateInput date={date} setDate={setDate} />
         </View>
         <TouchableOpacity style={styles.button}>
-          <Text
-            style={{
-              textAlign: "center",
-              color: "#fff",
-              fontWeight: "semibold",
-            }}
-          >
-            Crear cuenta
-          </Text>
+          <Text style={styles.buttonText}>Crear cuenta</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -74,6 +69,11 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 5,
     borderWidth: 1,
+  },
+  buttonText: {
+    textAlign: "center",
+    color: "#fff",
+    fontWeight: "600",
   },
   form: {
     paddingVertical: 30,

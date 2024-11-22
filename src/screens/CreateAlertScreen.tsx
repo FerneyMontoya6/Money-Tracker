@@ -1,21 +1,42 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Platform } from 'react-native';
-import DateTimePicker from '@react-native-community/datetimepicker';
+import { useState } from "react";
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+  Platform,
+} from "react-native";
+import DateTimePicker, {
+  DateTimePickerEvent,
+} from "@react-native-community/datetimepicker";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { HomeStackParamList } from "../navigation/types";
 
-export default function CreateAlertScreen({ navigation }) {
-  const [alertName, setAlertName] = useState('');
-  const [amount, setAmount] = useState('');
-  const [date, setDate] = useState(new Date());
-  const [showDatePicker, setShowDatePicker] = useState(false);
+// Tipar las props de navegación
+type CreateAlertScreenNavigationProp = StackNavigationProp<
+  HomeStackParamList,
+  "CreateAlertScreen"
+>;
+
+type Props = {
+  navigation: CreateAlertScreenNavigationProp;
+};
+
+export default function CreateAlertScreen({ navigation }: Props) {
+  const [alertName, setAlertName] = useState<string>("");
+  const [amount, setAmount] = useState<string>("");
+  const [date, setDate] = useState<Date>(new Date());
+  const [showDatePicker, setShowDatePicker] = useState<boolean>(false);
 
   const showDatepicker = () => {
     setShowDatePicker(true);
   };
 
-  const onChange = (event, selectedDate) => {
+  const onChange = (event: DateTimePickerEvent, selectedDate?: Date) => {
     const currentDate = selectedDate || date;
-    setShowDatePicker(Platform.OS === 'ios');
-    setDate(currentDate); 
+    setShowDatePicker(Platform.OS === "ios");
+    setDate(currentDate);
   };
 
   return (
@@ -44,8 +65,8 @@ export default function CreateAlertScreen({ navigation }) {
         <TextInput
           style={stylesCrear.input}
           placeholder="Selecciona una fecha"
-          value={date.toLocaleDateString()} 
-          editable={false} 
+          value={date.toLocaleDateString()}
+          editable={false}
         />
       </TouchableOpacity>
 
@@ -75,11 +96,11 @@ const stylesCrear = StyleSheet.create({
   },
   headerText: {
     fontSize: 24,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 20,
   },
   input: {
-    borderColor: 'gray',
+    borderColor: "gray",
     borderWidth: 1,
     padding: 10,
     marginVertical: 10,
@@ -87,13 +108,13 @@ const stylesCrear = StyleSheet.create({
   },
   cancelButton: {
     padding: 10,
-    backgroundColor: 'black',
+    backgroundColor: "black",
     marginTop: 20,
     borderRadius: 5,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   cancelButtonText: {
-    color: 'white',
+    color: "white",
   },
 });

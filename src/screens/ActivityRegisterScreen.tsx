@@ -5,8 +5,21 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from "react-native";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { HomeStackParamList } from "../navigation/types";
 
-export default function ActivityRegisterScreen({ navigation }) {
+// Definir el tipo de navegación
+type ActivityRegisterScreenNavigationProp = StackNavigationProp<
+  HomeStackParamList,
+  "ActivityRegister"
+>;
+
+// Definir las props del componente
+type Props = {
+  navigation: ActivityRegisterScreenNavigationProp;
+};
+
+export default function ActivityRegisterScreen({ navigation }: Props) {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Registrar Actividad</Text>
@@ -37,7 +50,7 @@ export default function ActivityRegisterScreen({ navigation }) {
 
       <TouchableOpacity
         style={styles.saveButton}
-        onPress={() => navigation.navigate("Home")}
+        onPress={() => navigation.navigate("HomeScreen")}
       >
         <Text style={styles.saveButtonText}>Guardar</Text>
       </TouchableOpacity>

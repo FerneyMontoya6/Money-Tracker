@@ -1,18 +1,10 @@
-import { TextInput, View, Text } from "react-native";
+import { TextInput, View, Text, TextInputProps } from "react-native";
 
-interface CustomTextInputProps {
-  placeholder: string;
+interface CustomTextInputProps extends TextInputProps {
   label: string;
-  onChangeText: (text: string) => void;
-  value: string;
 }
 
-const CustomTextInput = ({
-  placeholder,
-  label,
-  onChangeText,
-  value,
-}: CustomTextInputProps) => {
+const CustomTextInput = ({ ...props }: CustomTextInputProps) => {
   return (
     <View
       style={{
@@ -24,12 +16,10 @@ const CustomTextInput = ({
           fontWeight: "semibold",
         }}
       >
-        {label}
+        {props.label}
       </Text>
       <TextInput
-        placeholder={placeholder}
-        onChangeText={onChangeText}
-        value={value} // Para controlar el valor
+        {...props}
         style={{
           height: 40,
           borderColor: "gray",

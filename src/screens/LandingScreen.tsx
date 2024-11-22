@@ -1,9 +1,21 @@
 import { useState } from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { CategoriesStackParamList } from "../navigation/types";
 import { CustomTextInput } from "../components/Input";
 
-export default function LandingScreen({ navigation }) {
-  const [name, setName] = useState("");
+// Tipo de navegación para LandingScreen
+type LandingScreenNavigationProp = StackNavigationProp<
+  CategoriesStackParamList,
+  "LandingScreen"
+>;
+
+type Props = {
+  navigation: LandingScreenNavigationProp;
+};
+
+export default function LandingScreen({ navigation }: Props) {
+  const [name, setName] = useState<string>("");
 
   return (
     <View style={styles.container}>
@@ -20,7 +32,12 @@ export default function LandingScreen({ navigation }) {
         Organiza tus ingresos y gastos, establece presupuestos, y alcanza tus
         metas financieras con facilidad
       </Text>
-      <CustomTextInput label="Nombre" placeholder="Escribe tu nombre" />
+      <CustomTextInput
+        label="Nombre"
+        placeholder="Escribe tu nombre"
+        value={name}
+        onChangeText={setName}
+      />
       <TouchableOpacity
         style={styles.button}
         onPress={() => navigation.navigate("SpentCategoriesScreen")}
@@ -50,13 +67,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginBottom: 40,
     color: "#555",
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: "#ccc",
-    padding: 10,
-    marginBottom: 20,
-    borderRadius: 8,
   },
   button: {
     backgroundColor: "#000",

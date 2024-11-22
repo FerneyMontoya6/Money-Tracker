@@ -1,6 +1,18 @@
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { CategoriesStackParamList } from "../navigation/types";
 
-export default function SpentCategorySpeScreen({ navigation }) {
+// Tipo de navegación
+type SpentCategorySpeScreenNavigationProp = StackNavigationProp<
+  CategoriesStackParamList,
+  "SpentCategoriesScreen"
+>;
+
+type Props = {
+  navigation: SpentCategorySpeScreenNavigationProp;
+};
+
+export default function SpentCategorySpeScreen({ navigation }: Props) {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Selecciona tus categorías</Text>
