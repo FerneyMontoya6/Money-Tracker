@@ -3,14 +3,17 @@ import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator, ScrollView
 import { AccountCard } from "../components/AccountCard";
 import { db } from "../firebase-config.js"; // Asegúrate de importar tu configuración de Firebase
 import { collection, getDocs } from "firebase/firestore";
+import { useIsFocused } from "@react-navigation/native"; // Importa el hook
 
 export default function AccountScreen({ navigation }) {
   const [accounts, setAccounts] = useState([]); // Almacena las cuentas obtenidas
   const [loading, setLoading] = useState(true); // Indica si los datos están cargando
+  const isFocused = useIsFocused(); // Verifica si la pantalla está enfocada
 
   // Función para obtener cuentas desde Firestore
   const fetchAccounts = async () => {
     try {
+      setLoading(true); // Muestra el loader al iniciar la carga
       const accountsCollection = collection(db, "Cuentas"); // Referencia a la colección
       const snapshot = await getDocs(accountsCollection); // Obtén los documentos
       const accountsList = snapshot.docs.map((doc) => ({
@@ -25,10 +28,12 @@ export default function AccountScreen({ navigation }) {
     }
   };
 
-  // Llama a fetchAccounts al cargar la pantalla
+  // Llama a fetchAccounts al montar la pantalla y cuando esté enfocada
   useEffect(() => {
-    fetchAccounts();
-  }, []);
+    if (isFocused) {
+      fetchAccounts(); // Vuelve a cargar las cuentas cuando la pantalla está enfocada
+    }
+  }, [isFocused]); // Depende del estado de `isFocused`
 
   return (
     <View style={styles.container}>

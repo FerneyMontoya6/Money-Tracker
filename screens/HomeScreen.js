@@ -8,13 +8,9 @@ import {
 } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 
-import { firebaseConfig } from "../firebase-config";
 import {
   collection,
   getDocs,
-  addDoc,
-  deleteDoc,
-  doc,
 } from "firebase/firestore";
 
 import { db } from "../firebase-config";
