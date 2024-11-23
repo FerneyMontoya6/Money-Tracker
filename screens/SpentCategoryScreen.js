@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-
+import React, { useState, useEffect } from "react";
+import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import {
   getDocs,
   updateDoc,
@@ -13,8 +12,36 @@ import {
 
 import { db } from "../firebase-config"; // Asegúrate de que la configuración esté bien importada
 
-export default function SpentCategorySpeScreen({ navigation }) {
+export default function IncomeCategorySpeScreen({ navigation }) {
   const [selectedCategories, setSelectedCategories] = useState([]);
+  const [categories, setCategories] = useState([]);
+
+  // Función para obtener las categorías desde Firestore
+  const fetchCategories = async () => {
+    try {
+      const categoryCollectionRef = collection(db, "Categoria_ingreso");
+      const querySnapshot = await getDocs(categoryCollectionRef);
+
+      if (querySnapshot.empty) {
+        console.log("No se encontraron categorías.");
+        return;
+      }
+
+      // Mapeamos los documentos para obtener el nombre y el estado 'activo'
+      const categoryList = querySnapshot.docs.map(doc => ({
+        nombre: doc.data().nombre,
+        activo: doc.data().activo
+      }));
+
+      // Filtramos las categorías que ya están activas para seleccionarlas por defecto
+      const initiallySelected = categoryList.filter(cat => cat.activo).map(cat => cat.nombre);
+
+      setCategories(categoryList);
+      setSelectedCategories(initiallySelected);  // Establecer las categorías activas como seleccionadas
+    } catch (error) {
+      console.error("Error obteniendo categorías de ingreso:", error);
+    }
+  };
 
   // Función para manejar la selección de categorías
   const handleCategoryPress = async (category) => {
@@ -31,15 +58,15 @@ export default function SpentCategorySpeScreen({ navigation }) {
   // Función para actualizar el estado de las categorías
   const updateCategoryState = async (category) => {
     try {
-      // Suponemos que la colección "Categoria_gasto" tiene un documento cuyo campo 'nombre' coincide con 'category'
-      const categoryCollectionRef = collection(db, "Categoria_gasto");
+      // Suponemos que la colección "Categoria_ingreso" tiene un documento cuyo campo 'nombre' coincide con 'category'
+      const categoryCollectionRef = collection(db, "Categoria_ingreso");
 
       // Realizamos una consulta para obtener el documento con el nombre de la categoría
       const q = query(categoryCollectionRef, where("nombre", "==", category));
-      
+
       // Ejecutamos la consulta
       const querySnapshot = await getDocs(q);
-      
+
       if (querySnapshot.empty) {
         console.log(`No se encontró una categoría con el nombre: ${category}`);
         return;
@@ -49,7 +76,7 @@ export default function SpentCategorySpeScreen({ navigation }) {
       const categoryDoc = querySnapshot.docs[0];
 
       // Referencia al documento específico
-      const categoryDocRef = doc(db, "Categoria_gasto", categoryDoc.id);
+      const categoryDocRef = doc(db, "Categoria_ingreso", categoryDoc.id);
 
       // Obtener el documento antes de actualizar
       const docSnap = await getDoc(categoryDocRef);
@@ -66,44 +93,52 @@ export default function SpentCategorySpeScreen({ navigation }) {
       // Actualizamos el documento en Firestore
       await updateDoc(categoryDocRef, updatedCategory);
 
-      console.log("Categorías de gasto actualizadas correctamente");
+      console.log("Categorías de ingreso actualizadas correctamente");
     } catch (error) {
-      console.error("Error actualizando las categorías de gasto:", error);
+      console.error("Error actualizando las categorías de ingreso:", error);
     }
   };
+
+  // Cargar las categorías cuando el componente se monte
+  useEffect(() => {
+    fetchCategories();
+  }, []);
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Selecciona tus categorías</Text>
 
-      <Text style={styles.secundatyTitle}>Categorías de gasto</Text>
+      <Text style={styles.secundatyTitle}>Categorías de ingreso</Text>
 
       <View style={styles.categoriesContainer}>
-        {["Entretenimiento", "Salud", "Fitness", "Comida"].map((category) => (
-          <TouchableOpacity
-            key={category}
-            style={[
-              styles.category,
-              selectedCategories.includes(category) && styles.selectedCategory,
-            ]}
-            onPress={() => handleCategoryPress(category)} // Llamamos a la función para manejar la selección
-          >
-            <Text
+        {categories.length === 0 ? (
+          <Text>No se encontraron categorías.</Text>
+        ) : (
+          categories.map((category) => (
+            <TouchableOpacity
+              key={category.nombre}
               style={[
-                styles.categoryText,
-                selectedCategories.includes(category) &&
-                  styles.selectedCategoryText,
+                styles.category,
+                selectedCategories.includes(category.nombre) && styles.selectedCategory, // Mantener el color negro al seleccionar
               ]}
+              onPress={() => handleCategoryPress(category.nombre)} // Llamamos a la función para manejar la selección
             >
-              {category}
-            </Text>
-          </TouchableOpacity>
-        ))}
+              <Text
+                style={[
+                  styles.categoryText,
+                  selectedCategories.includes(category.nombre) && styles.selectedCategoryText, // Cambiar el color del texto cuando esté seleccionada
+                ]}
+              >
+                {category.nombre}
+              </Text>
+            </TouchableOpacity>
+          ))
+        )}
       </View>
 
       <TouchableOpacity
         style={styles.button}
-        onPress={() => navigation.navigate('IncomeCategoriesScreen')}
+        onPress={() => navigation.navigate("HomeTab", { screen: "HomeScreen" })}
       >
         <Text style={styles.buttonText}>Siguiente</Text>
       </TouchableOpacity>
@@ -114,45 +149,28 @@ export default function SpentCategorySpeScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: "center",
     padding: 20,
     paddingTop: 5,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
   },
-  title: {
-    fontSize: 36,
-    fontWeight: 'bold',
-    marginBottom: 70,
-  },
-  secundatyTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginBottom: 20,
-  },
-  categoriesContainer: {
-    marginBottom: 40,
-  },
+  title: { fontSize: 36, fontWeight: "bold", marginBottom: 70 },
+  secundatyTitle: { fontSize: 20, fontWeight: "bold", marginBottom: 20 },
+  categoriesContainer: { marginBottom: 40 },
   category: {
-    backgroundColor: '#f5f5f5',
+    backgroundColor: "#f5f5f5",
     padding: 15,
     borderRadius: 8,
     marginBottom: 10,
   },
-  selectedCategory: { backgroundColor: "#000" }, // Color cuando la categoría está seleccionada
-  categoryText: {
-    fontSize: 16,
-    textAlign: 'center',
-  },
-  selectedCategoryText: { color: "#fff" }, // Cambiar el color del texto cuando la categoría está seleccionada
-  button: {
-    backgroundColor: '#000',
-    padding: 15,
-    borderRadius: 8,
-  },
+  selectedCategory: { backgroundColor: "#000" }, // Mantener el color negro al seleccionar
+  categoryText: { fontSize: 16, textAlign: "center" },
+  selectedCategoryText: { color: "#fff" }, // Cambiar el color del texto cuando esté seleccionada
+  button: { backgroundColor: "#000", padding: 15, borderRadius: 8 },
   buttonText: {
-    color: '#fff',
-    textAlign: 'center',
+    color: "#fff",
+    textAlign: "center",
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
 });
