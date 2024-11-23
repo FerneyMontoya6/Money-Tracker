@@ -24,7 +24,7 @@ export default function ActivityRegisterScreen({ navigation }) {
   const [formData, setFormData] = useState({
     fecha: "",
     valor: "",
-    tipo: "", // Gasto o Ingreso
+    tipo: "", 
     categoria: "",
     cuenta: "",
     descripcion: "",

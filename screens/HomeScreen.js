@@ -8,28 +8,40 @@ import {
 } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 
-import {
-  collection,
-  getDocs,
-} from "firebase/firestore";
-
+import { collection, getDocs, onSnapshot } from "firebase/firestore";
 import { db } from "../firebase-config";
 
 export default function HomeScreen({ navigation }) {
-
-  const [saldo, setSaldo] = useState("");
+  const [saldo, setSaldo] = useState(0);
   const [nombre, setNombre] = useState("");
+  const [movimientos, setMovimientos] = useState([]);
 
+  // Obtener la información de la cuenta y sumar el saldo total de todas las cuentas
   const fetchUserInfo = async () => {
-    const userCollection = collection(db, "Usuario");
-    const userSnapshot = await getDocs(userCollection);
-    const usersList = userSnapshot.docs.map((doc) => doc.data());
-    setNombre(usersList[0].nombre);
-    setSaldo(usersList[0].saldo);
+    const cuentasCollection = collection(db, "Cuentas");
+    const cuentasSnapshot = await getDocs(cuentasCollection);
+    const cuentasList = cuentasSnapshot.docs.map((doc) => doc.data());
+
+    // Sumar los 'initialBalance' de todas las cuentas para obtener el saldo total
+    const totalSaldo = cuentasList.reduce((total, cuenta) => total + cuenta.initialBalance, 0);
+    setSaldo(totalSaldo);
+  };
+
+  // Obtener los movimientos y escuchar cambios en tiempo real
+  const fetchMovimientos = () => {
+    const movimientosCollection = collection(db, "Movimientos");
+    onSnapshot(movimientosCollection, (snapshot) => {
+      const movimientosList = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setMovimientos(movimientosList);
+    });
   };
 
   useEffect(() => {
     fetchUserInfo();
+    fetchMovimientos();
   }, []);
 
   return (
@@ -42,7 +54,10 @@ export default function HomeScreen({ navigation }) {
             <Text style={styles.welcome}>Bienvenido nuevamente</Text>
           </View>
         </View>
-        <TouchableOpacity style={styles.notificationIcon} onPress={() => navigation.navigate('AlertsScreen')} >
+        <TouchableOpacity
+          style={styles.notificationIcon}
+          onPress={() => navigation.navigate("AlertsScreen")}
+        >
           <MaterialIcons name="notifications-none" size={30} color="#000" />
           <View style={styles.notificationBadge}>
             <Text style={styles.badgeText}>5</Text>
@@ -69,26 +84,25 @@ export default function HomeScreen({ navigation }) {
 
       <ScrollView>
         <View style={styles.activityList}>
-          <View style={styles.activityItem}>
-            <Text style={styles.activityText}>Tiendas D1</Text>
-            <Text style={styles.activityDate}>18/08/24</Text>
-            <Text style={styles.activityAmount}>- $40,000</Text>
-          </View>
-          <View style={styles.activityItem}>
-            <Text style={styles.activityText}>ETF</Text>
-            <Text style={styles.activityDate}>17/08/24</Text>
-            <Text style={styles.activityAmount}>+ $80,000</Text>
-          </View>
-          <View style={styles.activityItem}>
-            <Text style={styles.activityText}>Recibos</Text>
-            <Text style={styles.activityDate}>17/08/24</Text>
-            <Text style={styles.activityAmount}>- $130,000</Text>
-          </View>
-          <View style={styles.activityItem}>
-            <Text style={styles.activityText}>Ventas</Text>
-            <Text style={styles.activityDate}>16/08/24</Text>
-            <Text style={styles.activityAmount}>+ $300,000</Text>
-          </View>
+          {movimientos.length > 0 ? (
+            movimientos.map((movimiento) => (
+              <View style={styles.activityItem} key={movimiento.id}>
+                <Text style={styles.activityText}>{movimiento.descripcion}</Text>
+                <Text style={styles.activityDate}>{movimiento.fecha}</Text>
+                <Text
+                  style={[
+                    styles.activityAmount,
+                    movimiento.tipo === "Gasto" ? { color: "red" } : { color: "green" },
+                  ]}
+                >
+                  {movimiento.tipo === "Gasto" ? "- $" : "+ $"}
+                  {movimiento.valor}
+                </Text>
+              </View>
+            ))
+          ) : (
+            <Text>No hay actividades recientes.</Text>
+          )}
         </View>
       </ScrollView>
     </View>
@@ -190,13 +204,5 @@ const styles = StyleSheet.create({
   activityAmount: {
     fontSize: 16,
     fontWeight: "bold",
-  },
-  footer: {
-    flexDirection: "row",
-    justifyContent: "space-around",
-    paddingVertical: 15,
-    backgroundColor: "#fff",
-    borderTopWidth: 1,
-    borderTopColor: "#ccc",
   },
 });
