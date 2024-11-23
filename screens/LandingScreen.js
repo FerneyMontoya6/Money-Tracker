@@ -2,12 +2,12 @@ import React, { useState, useEffect } from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { CustomTextInput } from "../components/Input";
 
-import { firebaseConfig } from "../firebase-config";
 import {
   collection,
   getDocs,
   addDoc,
   deleteDoc,
+  updateDoc,
   doc,
 } from "firebase/firestore/lite";
 
@@ -16,17 +16,36 @@ import { db } from "../firebase-config";
 export default function LandingScreen({ navigation }) {
   const [nombre, setNombre] = useState("");
 
-  const postUserName = async (userName) => {
-    const userCollection = collection(db, "Usuario");
-    const newUser = {
-      nombre: userName,
-      saldo: 0,
-    };
-    await addDoc(userCollection, newUser);
+  // const postUserName = async (userName) => {
+  //   const userCollection = collection(db, "Usuario");
+  //   const newUser = {
+  //     nombre: userName,
+  //     saldo: 0,
+  //   };
+  //   await addDoc(userCollection, newUser);
+  // };
+
+  const updateUserName = async () => {
+    try {
+      // Referencia al documento específico en la colección "Usuario"
+      const userDoc = doc(db, "Usuario", "z8LIz2ZMnwrwiEJBdA68");
+  
+      // Nuevos valores para actualizar
+      const updatedUser = {
+        nombre: nombre,
+      };
+  
+      // Actualizar los valores en Firestore
+      await updateDoc(userDoc, updatedUser);
+  
+      console.log("Usuario actualizado correctamente");
+    } catch (error) {
+      console.error("Error actualizando el usuario:", error);
+    }
   };
 
   const handleNavigateToCategories = () => {
-    postUserName(nombre);
+    updateUserName();
 
     navigation.navigate("MainApp", {
       screen: "CategoriesTab",

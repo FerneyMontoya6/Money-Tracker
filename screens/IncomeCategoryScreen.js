@@ -44,7 +44,9 @@ export default function IncomeCategorySpeScreen({ navigation }) {
 
       <TouchableOpacity
         style={styles.button}
-        onPress={() => navigation.navigate('HomeScreen')}
+        onPress={() => navigation.navigate("HomeTab", {
+          screen: "HomeScreen",
+        })}
       >
         <Text style={styles.buttonText}>Siguiente</Text>
       </TouchableOpacity>
