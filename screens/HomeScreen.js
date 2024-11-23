@@ -15,7 +15,7 @@ import {
   addDoc,
   deleteDoc,
   doc,
-} from "firebase/firestore/lite";
+} from "firebase/firestore";
 
 import { db } from "../firebase-config";
 
