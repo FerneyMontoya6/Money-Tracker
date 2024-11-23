@@ -27,7 +27,7 @@ const SelectInput = ({ label, selectedValue, onValueChange, options }) => {
           {options.map((option) => (
             <Picker.Item
               label={option.label}
-              value={option.value}
+              value={option.label}
               key={option.value}
             />
           ))}

@@ -7,15 +7,15 @@ import { bankingEntities, typesOfAccounts } from "../utils/constants";
 import { db } from "../firebase-config.js"; // Asegúrate de tener el archivo de configuración de Firebase
 import { collection, addDoc } from "firebase/firestore";
 
-export default function CreateAccountScreen() {
+export default function CreateAccountScreen({ navigation }) {
   const [name, setName] = useState(""); // Nombre de la cuenta
   const [description, setDescription] = useState(""); // Descripción
   const [initialBalance, setInitialBalance] = useState(""); // Saldo inicial
   const [selectedBankingEntity, setSelectedBankingEntity] = useState(
-    bankingEntities[0].value
+    bankingEntities[0].label
   ); // Entidad bancaria
   const [selectedTypeOfAccount, setSelectedTypeOfAccount] = useState(
-    typesOfAccounts[0].value
+    typesOfAccounts[0].label
   ); // Tipo de cuenta
   const [date, setDate] = useState(new Date()); // Fecha
 
@@ -34,8 +34,9 @@ export default function CreateAccountScreen() {
         initialBalance: parseFloat(initialBalance), // Asegúrate de que sea un número
         bankingEntity: selectedBankingEntity,
         typeOfAccount: selectedTypeOfAccount,
-        creationDate: date.toISOString(),
       });
+
+      navigation.navigate("AccountsTab", { screen: "AccountsScreen" })
 
       Alert.alert("Éxito", "Cuenta creada correctamente.");
     } catch (error) {
@@ -80,7 +81,6 @@ export default function CreateAccountScreen() {
             selectedValue={selectedTypeOfAccount}
             onValueChange={(value) => setSelectedTypeOfAccount(value)}
           />
-          <DateInput date={date} setDate={setDate} />
         </View>
         <TouchableOpacity style={styles.button} onPress={handleSaveAccount}>
           <Text style={styles.buttonText}>Crear cuenta</Text>
