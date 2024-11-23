@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -8,14 +8,41 @@ import {
 } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 
+import { firebaseConfig } from "../firebase-config";
+import {
+  collection,
+  getDocs,
+  addDoc,
+  deleteDoc,
+  doc,
+} from "firebase/firestore/lite";
+
+import { db } from "../firebase-config";
+
 export default function HomeScreen({ navigation }) {
+
+  const [saldo, setSaldo] = useState("");
+  const [nombre, setNombre] = useState("");
+
+  const fetchUserInfo = async () => {
+    const userCollection = collection(db, "Usuario");
+    const userSnapshot = await getDocs(userCollection);
+    const usersList = userSnapshot.docs.map((doc) => doc.data());
+    setNombre(usersList[0].nombre);
+    setSaldo(usersList[0].saldo);
+  };
+
+  useEffect(() => {
+    fetchUserInfo();
+  }, []);
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <View style={styles.profileContainer}>
           <MaterialIcons name="account-circle" size={50} color="#000" />
           <View style={styles.userInfo}>
-            <Text style={styles.name}>Hola, Juan</Text>
+            <Text style={styles.name}>Hola, {nombre}</Text>
             <Text style={styles.welcome}>Bienvenido nuevamente</Text>
           </View>
         </View>
@@ -30,7 +57,7 @@ export default function HomeScreen({ navigation }) {
       {/* Sección de saldo */}
       <View style={styles.balanceContainer}>
         <Text style={styles.balanceLabel}>Saldo Actual</Text>
-        <Text style={styles.balance}>$3,000,000</Text>
+        <Text style={styles.balance}>${saldo}</Text>
       </View>
 
       {/* Actividades recientes */}

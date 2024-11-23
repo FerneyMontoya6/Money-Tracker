@@ -1,9 +1,41 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { CustomTextInput } from "../components/Input";
 
+import { firebaseConfig } from "../firebase-config";
+import {
+  collection,
+  getDocs,
+  addDoc,
+  deleteDoc,
+  doc,
+} from "firebase/firestore/lite";
+
+import { db } from "../firebase-config";
+
 export default function LandingScreen({ navigation }) {
-  const [name, setName] = useState("");
+  const [nombre, setNombre] = useState("");
+
+  const postUserName = async (userName) => {
+    const userCollection = collection(db, "Usuario");
+    const newUser = {
+      nombre: userName,
+      saldo: 0,
+    };
+    await addDoc(userCollection, newUser);
+  };
+
+  const handleNavigateToCategories = () => {
+    postUserName(nombre);
+
+    navigation.navigate("MainApp", {
+      screen: "CategoriesTab",
+      params: {
+        screen: "SpentCategoriesScreen",
+      },
+    });
+  };
+
 
   return (
     <View style={styles.container}>
@@ -20,10 +52,10 @@ export default function LandingScreen({ navigation }) {
         Organiza tus ingresos y gastos, establece presupuestos, y alcanza tus
         metas financieras con facilidad
       </Text>
-      <CustomTextInput label="Nombre" placeholder="Escribe tu nombre" />
+      <CustomTextInput label="Nombre" placeholder="Escribe tu nombre" value={nombre} onChangeText={setNombre} />
       <TouchableOpacity
         style={styles.button}
-        onPress={() => navigation.navigate("SpentCategoriesScreen")}
+        onPress={handleNavigateToCategories}
       >
         <Text style={styles.buttonText}>Siguiente</Text>
       </TouchableOpacity>
