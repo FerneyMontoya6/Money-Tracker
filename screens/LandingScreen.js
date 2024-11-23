@@ -9,21 +9,13 @@ import {
   deleteDoc,
   updateDoc,
   doc,
-} from "firebase/firestore/lite";
+} from "firebase/firestore";
 
 import { db } from "../firebase-config";
 
 export default function LandingScreen({ navigation }) {
   const [nombre, setNombre] = useState("");
 
-  // const postUserName = async (userName) => {
-  //   const userCollection = collection(db, "Usuario");
-  //   const newUser = {
-  //     nombre: userName,
-  //     saldo: 0,
-  //   };
-  //   await addDoc(userCollection, newUser);
-  // };
 
   const updateUserName = async () => {
     try {
