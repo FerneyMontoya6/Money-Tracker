@@ -1,9 +1,35 @@
-import React from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import React, { useState, useEffect } from "react";
+import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator, ScrollView } from "react-native";
 import { AccountCard } from "../components/AccountCard";
-import { accounts } from "../utils/mock";
+import { db } from "../firebase-config.js"; // Asegúrate de importar tu configuración de Firebase
+import { collection, getDocs } from "firebase/firestore";
 
 export default function AccountScreen({ navigation }) {
+  const [accounts, setAccounts] = useState([]); // Almacena las cuentas obtenidas
+  const [loading, setLoading] = useState(true); // Indica si los datos están cargando
+
+  // Función para obtener cuentas desde Firestore
+  const fetchAccounts = async () => {
+    try {
+      const accountsCollection = collection(db, "Cuentas"); // Referencia a la colección
+      const snapshot = await getDocs(accountsCollection); // Obtén los documentos
+      const accountsList = snapshot.docs.map((doc) => ({
+        id: doc.id, // Incluye el ID del documento
+        ...doc.data(), // Obtén los datos de la cuenta
+      }));
+      setAccounts(accountsList); // Guarda las cuentas en el estado
+    } catch (error) {
+      console.error("Error al obtener las cuentas: ", error);
+    } finally {
+      setLoading(false); // Finaliza el estado de carga
+    }
+  };
+
+  // Llama a fetchAccounts al cargar la pantalla
+  useEffect(() => {
+    fetchAccounts();
+  }, []);
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -15,8 +41,10 @@ export default function AccountScreen({ navigation }) {
           <Text>Agregar Cuenta</Text>
         </TouchableOpacity>
       </View>
-      <View style={styles.accountsWrapper}>
-        {accounts.length === 0 ? (
+      <ScrollView contentContainerStyle={styles.accountsWrapper} showsVerticalScrollIndicator={false}>
+        {loading ? (
+          <ActivityIndicator size="large" color="#000" />
+        ) : accounts.length === 0 ? (
           <Text>No hay cuentas registradas</Text>
         ) : (
           accounts.map((account, index) => (
@@ -24,12 +52,12 @@ export default function AccountScreen({ navigation }) {
               key={account.id}
               index={index + 1}
               name={account.name}
-              type={account.type}
-              balance={account.balance}
+              type={account.typeOfAccount} // Tipo de cuenta
+              balance={account.initialBalance} // Saldo inicial
             />
           ))
         )}
-      </View>
+      </ScrollView>
     </View>
   );
 }
